@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ProductService } from './product.service';
 import { Product } from '../models/product.model';
@@ -47,18 +47,31 @@ describe('ProductService', () => {
     req.flush(mockProducts);
   });
 
-  it('should set and get selected product', (done) => {
+  it('should set and get selected product', fakeAsync(() => {
     service.setSelectedProduct(mockProduct);
     
+    // Wait for debounce time
+    tick(300);
+
+    // Handle the HTTP request
+    const req = httpMock.expectOne(`https://fakestoreapi.com/products/${mockProduct.id}`);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockProduct);
+
     service.selectedProduct$.subscribe(product => {
       expect(product).toEqual(mockProduct);
-      done();
     });
-  });
+  }));
 
-  it('should store selected product in localStorage', () => {
+  it('should store selected product in localStorage', fakeAsync(() => {
     spyOn(localStorage, 'setItem');
     service.setSelectedProduct(mockProduct);
+    
+    tick(300);
+    
+    const req = httpMock.expectOne(`https://fakestoreapi.com/products/${mockProduct.id}`);
+    req.flush(mockProduct);
+
     expect(localStorage.setItem).toHaveBeenCalledWith('selectedProduct', JSON.stringify(mockProduct));
-  });
+  }));
 }); 
