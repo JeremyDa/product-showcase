@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductDetailComponent } from './product-detail.component';
 import { ProductService } from '../../services/product.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { Product } from '../../models/product.model';
 
@@ -22,11 +22,11 @@ describe('ProductDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ProductDetailComponent,
-        HttpClientTestingModule
-      ],
-      providers: [ProductService]
+      imports: [ProductDetailComponent],
+      providers: [
+        ProductService,
+        provideHttpClient(withFetch())
+      ]
     }).compileComponents();
 
     productService = TestBed.inject(ProductService);

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
@@ -13,8 +13,10 @@ describe('AppComponent', () => {
       imports: [
         AppComponent,
         ProductListComponent,
-        ProductDetailComponent,
-        HttpClientTestingModule
+        ProductDetailComponent
+      ],
+      providers: [
+        provideHttpClient()
       ]
     }).compileComponents();
 
