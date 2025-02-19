@@ -7,7 +7,7 @@ import { Product } from '../models/product.model';
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = 'https://fakestoreapi.com';
+  private apiUrl = 'https://fakestoreapi.com/products';
   private selectedProductSubject = new BehaviorSubject<Product | null>(null);
   selectedProduct$ = this.selectedProductSubject.asObservable();
 
@@ -20,18 +20,22 @@ export class ProductService {
   }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products`);
+    return this.http.get<Product[]>(this.apiUrl);
   }
 
-  getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/products/${id}`);
+  getProductDetail(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
   setSelectedProduct(product: Product | null): void {
-    this.selectedProductSubject.next(product);
     if (product) {
-      localStorage.setItem('selectedProduct', JSON.stringify(product));
+      this.getProductDetail(product.id).subscribe(detailProduct => {
+        this.selectedProductSubject.next(detailProduct);
+        localStorage.setItem('selectedProduct', JSON.stringify(detailProduct));
+      });
+
     } else {
+      this.selectedProductSubject.next(null);
       localStorage.removeItem('selectedProduct');
     }
   }
