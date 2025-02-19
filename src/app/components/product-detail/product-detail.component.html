@@ -1,0 +1,12 @@
+<div class="product-detail" [class.active]="selectedProduct$ | async">
+  <ng-container *ngIf="selectedProduct$ | async as product">
+    <button class="close-button" (click)="closeDetail()">×</button>
+    <div class="detail-content">
+      <img [src]="product.image" [alt]="product.title" class="detail-image">
+      <h2>{{ product.title }}</h2>
+      <p class="category">{{ product.category }}</p>
+      <p class="price">${{ product.price }}</p>
+      <p class="description">{{ product.description }}</p>
+    </div>
+  </ng-container>
+</div> 
