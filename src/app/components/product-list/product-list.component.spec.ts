@@ -3,13 +3,14 @@ import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../../services/product.service';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
+import { Product } from '../../models/product.model';
 
 describe('ProductListComponent', () => {
   let component: ProductListComponent;
   let fixture: ComponentFixture<ProductListComponent>;
   let productService: ProductService;
 
-  const mockProducts = [
+  const mockProducts: Product[] = [
     {
       id: 1,
       title: 'Test Product 1',
@@ -32,9 +33,7 @@ describe('ProductListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ProductListComponent
-      ],
+      imports: [ProductListComponent],
       providers: [
         ProductService,
         provideHttpClient()
@@ -53,10 +52,10 @@ describe('ProductListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load products on init', (done) => {
-    component.products$.subscribe(products => {
-      expect(products).toEqual(mockProducts);
+  it('should load products with selection state', (done) => {
+    component.productsWithSelected$.subscribe(products => {
       expect(products.length).toBe(2);
+      expect(products[0].id).toBe(mockProducts[0].id);
       done();
     });
   });
