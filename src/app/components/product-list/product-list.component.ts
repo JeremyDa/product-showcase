@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
+import { map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -12,7 +14,18 @@ import { ProductService } from '../../services/product.service';
 })
 export class ProductListComponent {
   private productService = inject(ProductService);
-  products$ = this.productService.getProducts();
+  
+  productsWithSelected$ = combineLatest([
+    this.productService.getProducts(),
+    this.productService.selectedProduct$
+  ]).pipe(
+    map(([products, selectedProduct]) => 
+      products.map(product => ({
+        ...product,
+        selected: selectedProduct?.id === product.id
+      }))
+    )
+  );
 
   selectProduct(product: Product): void {
     this.productService.setSelectedProduct(product);

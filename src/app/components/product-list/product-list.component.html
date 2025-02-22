@@ -1,5 +1,8 @@
 <div class="product-list">
-  <div *ngFor="let product of products$ | async" class="product-item" (click)="selectProduct(product)">
+  <div *ngFor="let product of productsWithSelected$ | async" 
+       class="product-item"
+       [class.selected]="product.selected"
+       (click)="selectProduct(product)">
     <img [src]="product.image" [alt]="product.title">
     <div class="product-info">
       <h3>{{ product.title }}</h3>

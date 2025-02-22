@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, switchMap } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 
 @Injectable({
@@ -15,9 +15,11 @@ export class ProductService {
 
   constructor(private http: HttpClient) {
     // Restore selected product state from localStorage
-    const savedProduct = localStorage.getItem('selectedProduct');
-    if (savedProduct) {
-      this.selectedProductSubject.next(JSON.parse(savedProduct));
+    const savedProductId = localStorage.getItem('selectedProductId');
+    if (savedProductId) {
+      this.getProductDetail(parseInt(savedProductId)).subscribe(product => {
+        this.selectedProductSubject.next(product);
+      });
     }
 
     // Handle product selection with debounce
@@ -30,9 +32,9 @@ export class ProductService {
     ).subscribe(product => {
       this.selectedProductSubject.next(product);
       if (product) {
-        localStorage.setItem('selectedProduct', JSON.stringify(product));
+        localStorage.setItem('selectedProductId', product.id.toString());
       } else {
-        localStorage.removeItem('selectedProduct');
+        localStorage.removeItem('selectedProductId');
       }
     });
   }
