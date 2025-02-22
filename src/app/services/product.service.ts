@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, switchMap } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 
 @Injectable({

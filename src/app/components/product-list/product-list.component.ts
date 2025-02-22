@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '../../models/product.model';
-import { ProductService } from '../../services/product.service';
-import { map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ProductService } from '../../services/product.service';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-list',
