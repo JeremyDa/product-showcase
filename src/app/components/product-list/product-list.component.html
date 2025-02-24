@@ -1,9 +1,9 @@
 <div class="product-list">
-  <div *ngFor="let product of productsWithSelected$ | async" 
+  <div *ngFor="let product of productsWithSelected$ | async; trackBy: trackByProductId" 
        class="product-item"
        [class.selected]="product.selected"
        (click)="selectProduct(product)">
-    <img [src]="product.image" [alt]="product.title">
+    <img [src]="product.image" [alt]="product.title" loading="lazy">
     <div class="product-info">
       <h3>{{ product.title }}</h3>
       <p class="category">{{ product.category }}</p>
